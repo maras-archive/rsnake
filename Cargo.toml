@@ -1,0 +1,7 @@
+[package]
+name = "rsnake"
+version = "0.1.0"
+authors = ["schulke-214 <schulkemaximilian@gmail.com>"]
+edition = "2018"
+
+[dependencies]
