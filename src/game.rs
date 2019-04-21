@@ -9,3 +9,14 @@ impl Position {
         self.y += force.1;
     }
 }
+
+pub enum Direction {
+    Up,
+    Right,
+    Down,
+    Left,
+}
+
+impl Direction {
+    fn opposite(&self) {}
+}
