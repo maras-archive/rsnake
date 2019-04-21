@@ -5,3 +5,5 @@ authors = ["schulke-214 <schulkemaximilian@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+piston_window = "0.89.0"
+rand = "0.6.5"
