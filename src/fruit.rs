@@ -1,4 +1,4 @@
-use crate::game::physics::Position;
+use crate::physics::Position;
 
 pub struct Fruit {
     pos: Position,
