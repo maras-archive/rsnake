@@ -1,4 +1,4 @@
-use crate::game::physics::Direction;
+use crate::physics::Direction;
 
 pub struct Snake {
     direction: Direction,
