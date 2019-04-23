@@ -1,31 +1,38 @@
+mod colors;
 mod draw;
 mod fruit;
 mod game;
 mod physics;
 mod snake;
 
+use draw::blocks_in_pixels;
 use game::Game;
 use piston_window::*;
 
-fn main() {
-    let (width, height) = (30, 30);
+const WINDOW_TITLE: &'static str = "rsnake";
+const WIDTH: u32 = 25;
+const HEIGHT: u32 = 25;
 
-    let mut window: PistonWindow = WindowSettings::new("rsnake", [width * 25, height * 25])
-        .exit_on_esc(true)
+fn main() {
+    let size = [blocks_in_pixels(WIDTH), blocks_in_pixels(HEIGHT)];
+
+    let mut window: PistonWindow = WindowSettings::new(WINDOW_TITLE, size)
         .resizable(false)
         .build()
         .unwrap();
 
-    let mut game = Game::new(width, height);
+    let mut main = Game::new(WIDTH, HEIGHT);
+
+    main.update();
 
     while let Some(event) = window.next() {
         // if let Some(Button::Keyboard(key)) = event.press_args() {
         //     game.key_pressed(key);
         // }
 
-        window.draw_2d(&event, |c, g| {
-            clear([0.0, 0.0, 0.0, 1.0], g);
-            // game.draw(&c, g);
+        window.draw_2d(&event, |ctx, g| {
+            clear(colors::BACKGROUND, g);
+            main.draw(ctx, g);
         });
 
         //     event.update(|arg| {
