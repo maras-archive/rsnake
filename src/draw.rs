@@ -17,3 +17,7 @@ pub fn draw_block(ctx: &Context, g: &mut G2d, c: Color, pos: &Position) {
         g,
     );
 }
+
+pub fn blocks_in_pixels(n: u32) -> u32 {
+    n * BLOCK_SIZE as u32
+}
