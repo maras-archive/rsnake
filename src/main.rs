@@ -21,22 +21,20 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut main = Game::new(WIDTH, HEIGHT);
-
-    main.update();
+    let mut main: Game = Game::new(WIDTH, HEIGHT);
 
     while let Some(event) = window.next() {
-        // if let Some(Button::Keyboard(key)) = event.press_args() {
-        //     game.key_pressed(key);
-        // }
+        if let Some(Button::Keyboard(key)) = event.press_args() {
+            main.key_down(key);
+        }
 
         window.draw_2d(&event, |ctx, g| {
             clear(colors::BACKGROUND, g);
             main.draw(ctx, g);
         });
 
-        //     event.update(|arg| {
-        //         game.update(arg.dt);
-        //     });
+        event.update(|arg| {
+            main.update(arg.dt);
+        });
     }
 }
