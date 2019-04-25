@@ -1,15 +1,21 @@
+#[derive(Debug, Clone, PartialEq)]
 pub struct Position {
     pub x: i32,
     pub y: i32,
 }
 
 impl Position {
-    pub fn move_by(&mut self, force: (i32, i32)) {
-        self.x += force.0;
-        self.y += force.1;
+    pub fn move_to_dir(&mut self, dir: Direction) {
+        match dir {
+            Direction::Up => self.y -= 1,
+            Direction::Down => self.y += 1,
+            Direction::Left => self.x -= 1,
+            Direction::Right => self.x += 1,
+        }
     }
 }
 
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Direction {
     Up,
     Right,
@@ -18,7 +24,7 @@ pub enum Direction {
 }
 
 impl Direction {
-    fn opposite(&self) -> Direction {
+    pub fn opposite(&self) -> Direction {
         match *self {
             Direction::Up => Direction::Down,
             Direction::Right => Direction::Left,
