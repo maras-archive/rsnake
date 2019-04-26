@@ -20,6 +20,7 @@ impl Snake {
         tail.push_back(Position { x, y: y - 3 });
         tail.push_back(Position { x, y: y - 4 });
         tail.push_back(Position { x, y: y - 5 });
+        tail.push_back(Position { x, y: y - 8 });
 
         Self {
             direction: Direction::Down,
@@ -52,11 +53,11 @@ impl Snake {
     }
 
     pub fn draw(&self, ctx: &Context, g: &mut G2d) {
-        draw_block(&ctx, g, colors::SNAKE, &self.head);
-
         for block in self.tail.iter() {
             draw_block(&ctx, g, colors::SNAKE, block)
         }
+
+        draw_block(&ctx, g, colors::FRUIT, &self.head);
     }
 
     pub fn set_dir(&mut self, dir: Direction) {
@@ -71,7 +72,18 @@ impl Snake {
         &self.head
     }
 
-    pub fn is_tail_overlapping(&self) -> bool {
+    pub fn is_alive(&self, size: (u32, u32)) -> bool {
+        let next_pos = self.next_pos();
+        let (width, height) = size;
+
+        next_pos.x >= 0
+            && next_pos.y >= 0
+            && next_pos.x <= width as i32
+            && next_pos.y <= height as i32
+            && !self.is_tail_overlapping()
+    }
+
+    fn is_tail_overlapping(&self) -> bool {
         for pos in self.tail.iter() {
             if *pos == self.head {
                 return true;
@@ -79,5 +91,18 @@ impl Snake {
         }
 
         false
+    }
+
+    fn next_pos(&self) -> Position {
+        let mut pos = self.head.clone();
+
+        match self.direction {
+            Direction::Up => pos.y -= 1,
+            Direction::Left => pos.x += 1,
+            Direction::Down => pos.y += 1,
+            Direction::Right => pos.x -= 1,
+        }
+
+        pos
     }
 }
