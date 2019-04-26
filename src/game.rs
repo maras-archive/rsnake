@@ -87,10 +87,11 @@ impl Game {
 
         if self.waiting_time > fps_in_ms(FPS) && !self.over {
             // self.check_colision() use snake.get_head_pos;
-            self.snake.update();
             self.waiting_time = 0.0;
 
-            if !self.snake.is_alive(self.size) {
+            if self.snake.is_alive(self.size) {
+                self.snake.update();
+            } else {
                 self.over = true;
             }
         }
