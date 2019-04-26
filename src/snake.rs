@@ -78,8 +78,8 @@ impl Snake {
 
         next_pos.x >= 0
             && next_pos.y >= 0
-            && next_pos.x <= width as i32
-            && next_pos.y <= height as i32
+            && next_pos.x <= (width - 1) as i32
+            && next_pos.y <= (height - 1) as i32
             && !self.is_tail_overlapping()
     }
 
@@ -98,9 +98,9 @@ impl Snake {
 
         match self.direction {
             Direction::Up => pos.y -= 1,
-            Direction::Left => pos.x += 1,
+            Direction::Left => pos.x -= 1,
             Direction::Down => pos.y += 1,
-            Direction::Right => pos.x -= 1,
+            Direction::Right => pos.x += 1,
         }
 
         pos
