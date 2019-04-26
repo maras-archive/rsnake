@@ -12,15 +12,12 @@ pub struct Snake {
 }
 
 impl Snake {
-    pub fn new(x: i32, y: i32) -> Self {
+    pub fn new(head: Position) -> Self {
+        let (x, y) = (head.x, head.y);
         let mut tail = LinkedList::new();
 
         tail.push_back(Position { x, y: y - 1 });
         tail.push_back(Position { x, y: y - 2 });
-        tail.push_back(Position { x, y: y - 3 });
-        tail.push_back(Position { x, y: y - 4 });
-        tail.push_back(Position { x, y: y - 5 });
-        tail.push_back(Position { x, y: y - 8 });
 
         Self {
             direction: Direction::Down,
@@ -57,7 +54,7 @@ impl Snake {
             draw_block(&ctx, g, colors::SNAKE, block)
         }
 
-        draw_block(&ctx, g, colors::FRUIT, &self.head);
+        draw_block(&ctx, g, colors::SNAKE, &self.head);
     }
 
     pub fn set_dir(&mut self, dir: Direction) {

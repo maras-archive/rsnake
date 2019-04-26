@@ -1,6 +1,5 @@
 mod colors;
 mod draw;
-mod fruit;
 mod game;
 mod physics;
 mod snake;
