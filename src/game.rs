@@ -54,7 +54,6 @@ impl Game {
     }
 
     pub fn draw(&self, ctx: Context, g: &mut G2d) {
-        self.draw_border(&ctx, g);
         self.snake.draw(&ctx, g);
 
         if self.over {
@@ -91,7 +90,7 @@ impl Game {
             self.snake.update();
             self.waiting_time = 0.0;
 
-            if self.snake.is_tail_overlapping() {
+            if !self.snake.is_alive(self.size) {
                 self.over = true;
             }
         }
@@ -111,45 +110,13 @@ impl Game {
         }
     }
 
-    fn draw_border(&self, ctx: &Context, g: &mut G2d) {
-        let [win_width, win_height] = ctx.get_view_size();
-
-        rectangle(
-            colors::BORDER,
-            [0.0, 0.0, draw::BLOCK_SIZE, win_height],
-            ctx.transform,
-            g,
-        );
-
-        rectangle(
-            colors::BORDER,
-            [0.0, 0.0, win_width, draw::BLOCK_SIZE],
-            ctx.transform,
-            g,
-        );
-
-        rectangle(
-            colors::BORDER,
-            [
-                win_width - draw::BLOCK_SIZE,
-                0.0,
-                draw::BLOCK_SIZE,
-                win_height,
-            ],
-            ctx.transform,
-            g,
-        );
-
-        rectangle(
-            colors::BORDER,
-            [
-                0.0,
-                win_height - draw::BLOCK_SIZE,
-                win_width,
-                draw::BLOCK_SIZE,
-            ],
-            ctx.transform,
-            g,
-        );
-    }
+    // fn update_snake(&mut self, dir: Option<Direction>) {
+    //     if self.check_if_snake_alive(dir) {
+    //         self.snake.move_forward(dir);
+    //         self.check_eating();
+    //     } else {
+    //         self.game_over = true;
+    //     }
+    //     self.waiting_time = 0.0;
+    // }
 }
