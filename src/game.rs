@@ -1,25 +1,24 @@
 use piston_window::*;
 use rand::Rng;
 
-use crate::{
-    colors, draw,
-    physics::{Direction, Position},
-    snake::Snake,
-};
+use crate::colors;
+use crate::draw::*;
+use crate::physics::{Direction, Position};
+use crate::snake::Snake;
 
-const FPS: f64 = 8.0;
+const FPS: f64 = 30.0;
 // const RESTART_TIME: f64 = 1.0;
 
 fn fps_in_ms(fps: f64) -> f64 {
     1.0 / fps
 }
 
-fn calc_random_pos(width: u32, height: u32, border: u32) -> Position {
+fn calc_random_pos(width: u32, height: u32) -> Position {
     let mut rng = rand::thread_rng();
 
     Position {
-        x: rng.gen_range(border as i32, (width - border) as i32),
-        y: rng.gen_range(border as i32, (height - border) as i32),
+        x: rng.gen_range(0, width as i32),
+        y: rng.gen_range(0, height as i32),
     }
 }
 
@@ -35,20 +34,11 @@ pub struct Game {
 
 impl Game {
     pub fn new(width: u32, height: u32) -> Self {
-        let border: u32 = (width as f64 * 0.25) as u32 + 3;
-
-        let mut snake_pos: Position = calc_random_pos(width, height, border);
-        let mut fruit_pos: Position = calc_random_pos(width, height, border);
-
-        loop {
-            if snake_pos.y != fruit_pos.y {
-                break;
-            }
-        }
+        // use fn defined at eof to calc random fruit / snake pos here
 
         Self {
-            snake: Snake::new(calc_random_pos(width, height, border)),
-            fruit: calc_random_pos(width, height, border),
+            snake: Snake::new(calc_random_pos(width, height)),
+            fruit: calc_random_pos(width, height),
             size: (width, height),
             waiting_time: 0.0,
             score: 0,
@@ -74,21 +64,12 @@ impl Game {
     }
 
     pub fn draw(&self, ctx: Context, g: &mut G2d) {
+        draw_block(&ctx, g, colors::FRUIT, &self.fruit);
         self.snake.draw(&ctx, g);
-        draw::draw_block(&ctx, g, colors::FRUIT, &self.fruit);
+        draw_text(&ctx, g, colors::SCORE, self.score.to_string());
 
         if self.over {
-            rectangle(
-                colors::OVERLAY,
-                [
-                    0.0,
-                    0.0,
-                    draw::blocks_in_pixels(self.size.0) as f64,
-                    draw::blocks_in_pixels(self.size.1) as f64,
-                ],
-                ctx.transform,
-                g,
-            );
+            draw_overlay(&ctx, g, colors::OVERLAY, self.size)
         }
     }
 
@@ -106,8 +87,14 @@ impl Game {
             // self.check_colision() use snake.get_head_pos;
             self.waiting_time = 0.0;
 
-            if self.snake.is_alive(self.size) {
-                self.snake.update();
+            if !self.snake.is_tail_overlapping() {
+                self.snake.update(self.size.0, self.size.1);
+
+                if *self.snake.get_head_pos() == self.fruit {
+                    self.snake.grow();
+                    self.snake.update(self.size.0, self.size.1);
+                    self.fruit = calc_random_pos(self.size.0, self.size.1);
+                }
             } else {
                 self.over = true;
             }
@@ -132,6 +119,8 @@ impl Game {
         }
     }
 
+    // IMPORTANT!! -
+
     // fn update_snake(&mut self, dir: Option<Direction>) {
     //     if self.check_if_snake_alive(dir) {
     //         self.snake.move_forward(dir);
@@ -142,3 +131,20 @@ impl Game {
     //     self.waiting_time = 0.0;
     // }
 }
+
+// fn calc_not_overlapping_pos(pos_vec: Vec<Position>, width: u32, height: u32) {
+//     let mut fruit_pos: Position = calc_random_pos(width, height);
+
+//     loop {
+//         // if snake_pos.y != fruit_pos.y {
+//         //     break;
+//         // }
+
+//         for pos in pos_vec {
+//             if
+//         }
+
+//         snake_pos = calc_random_pos(width, height);
+//         fruit_pos = calc_random_pos(width, height);
+//     }
+// }
