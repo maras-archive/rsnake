@@ -18,6 +18,20 @@ pub fn draw_block(ctx: &Context, g: &mut G2d, c: Color, pos: &Position) {
     );
 }
 
+pub fn draw_overlay(ctx: &Context, g: &mut G2d, c: Color, size: (u32, u32)) {
+    rectangle(
+        c,
+        [
+            0.0,
+            0.0,
+            blocks_in_pixels(size.0) as f64,
+            blocks_in_pixels(size.1) as f64,
+        ],
+        ctx.transform,
+        g,
+    );
+}
+
 pub fn blocks_in_pixels(n: u32) -> u32 {
     n * BLOCK_SIZE as u32
 }
