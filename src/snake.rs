@@ -35,7 +35,7 @@ impl Snake {
     // pub fn grow(&mut self, x: u32, y: u32) {
     //     self.tail.push_back(Position { x, y })
     // }
-    pub fn update(&mut self) {
+    pub fn update(&mut self, width: u32, height: u32) {
         if self.tail.len() > 0 {
             self.tail.push_front(self.head.clone());
             self.tail.pop_back();
@@ -46,6 +46,16 @@ impl Snake {
             Direction::Right => self.head.x += 1,
             Direction::Down => self.head.y += 1,
             Direction::Left => self.head.x -= 1,
+        }
+
+        if self.head.x >= width as i32 {
+            self.head.x = 0;
+        } else if self.head.y >= height as i32 {
+            self.head.y = 0;
+        } else if self.head.y < 0 {
+            self.head.y = height as i32;
+        } else if self.head.x < 0 {
+            self.head.x = width as i32;
         }
     }
 
@@ -69,18 +79,20 @@ impl Snake {
         &self.head
     }
 
-    pub fn is_alive(&self, size: (u32, u32)) -> bool {
-        let next_pos = self.next_pos();
-        let (width, height) = size;
+    // pub fn is_alive(&self, size: (u32, u32)) -> bool {
+    // let next_pos = self.next_pos();
+    // let (width, height) = size;
 
-        next_pos.x >= 0
-            && next_pos.y >= 0
-            && next_pos.x <= (width - 1) as i32
-            && next_pos.y <= (height - 1) as i32
-            && !self.is_tail_overlapping()
-    }
+    // next_pos.x >= 0
+    //     && next_pos.y >= 0
+    //     && next_pos.x <= (width - 1) as i32
+    //     && next_pos.y <= (height - 1) as i32
+    //     &&
 
-    fn is_tail_overlapping(&self) -> bool {
+    // !self.is_tail_overlapping()
+    // }
+
+    pub fn is_tail_overlapping(&self) -> bool {
         for pos in self.tail.iter() {
             if *pos == self.head {
                 return true;
@@ -88,6 +100,15 @@ impl Snake {
         }
 
         false
+    }
+
+    pub fn grow(&mut self) {
+        let last = match self.tail.back() {
+            Some(pos) => pos.clone(),
+            None => self.head.clone(),
+        };
+
+        self.tail.push_back(last);
     }
 
     fn next_pos(&self) -> Position {
