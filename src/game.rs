@@ -6,7 +6,7 @@ use crate::draw::*;
 use crate::physics::{Direction, Position};
 use crate::snake::Snake;
 
-const FPS: f64 = 30.0;
+const FPS: f64 = 10.0;
 // const RESTART_TIME: f64 = 1.0;
 
 fn fps_in_ms(fps: f64) -> f64 {
