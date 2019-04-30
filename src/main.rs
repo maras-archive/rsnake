@@ -20,8 +20,14 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut main: Game = Game::new(WIDTH, HEIGHT);
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets")
+        .unwrap();
+    let ref font = assets.join("retro-gaming.ttf");
+    let factory = window.factory.clone();
+    let mut glyphs = Glyphs::new(font, factory, TextureSettings::new()).unwrap();
 
+    let mut main: Game = Game::new(WIDTH, HEIGHT);
     main.start();
 
     while let Some(event) = window.next() {
@@ -31,6 +37,15 @@ fn main() {
 
         window.draw_2d(&event, |ctx, g| {
             clear(colors::BACKGROUND, g);
+            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 20)
+                .draw(
+                    main.get_score().to_string().as_ref(),
+                    &mut glyphs,
+                    &ctx.draw_state,
+                    ctx.transform.trans(0.0, 20.0),
+                    g,
+                )
+                .unwrap();
             main.draw(ctx, g);
         });
 
