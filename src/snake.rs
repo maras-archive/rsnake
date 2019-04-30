@@ -5,6 +5,8 @@ use crate::colors;
 use crate::draw::*;
 use crate::physics::{Direction, Position};
 
+const INITIAL_SNAKE_TAIL_LENGTH: usize = 2;
+
 pub struct Snake {
     direction: Direction,
     head: Position,
@@ -16,8 +18,9 @@ impl Snake {
         let (x, y) = (head.x, head.y);
         let mut tail = LinkedList::new();
 
-        tail.push_back(Position { x, y: y - 1 });
-        tail.push_back(Position { x, y: y - 2 });
+        for i in 1..(INITIAL_SNAKE_TAIL_LENGTH + 1) {
+            tail.push_back(Position { x, y: y - i as i32 });
+        }
 
         Self {
             direction: Direction::Down,
@@ -77,6 +80,10 @@ impl Snake {
 
     pub fn get_head_pos(&self) -> &Position {
         &self.head
+    }
+
+    pub fn get_len(&self) -> usize {
+        &self.tail.len() - INITIAL_SNAKE_TAIL_LENGTH
     }
 
     // pub fn is_alive(&self, size: (u32, u32)) -> bool {
