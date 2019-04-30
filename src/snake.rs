@@ -11,6 +11,7 @@ pub struct Snake {
     direction: Direction,
     head: Position,
     tail: LinkedList<Position>,
+    updated_tail_pos: bool,
 }
 
 impl Snake {
@@ -26,6 +27,7 @@ impl Snake {
             direction: Direction::Down,
             head: Position { x, y },
             tail,
+            updated_tail_pos: false,
         }
     }
 
@@ -60,6 +62,8 @@ impl Snake {
         } else if self.head.x < 0 {
             self.head.x = width as i32;
         }
+
+        self.updated_tail_pos = true;
     }
 
     pub fn draw(&self, ctx: &Context, g: &mut G2d) {
@@ -71,11 +75,12 @@ impl Snake {
     }
 
     pub fn set_dir(&mut self, dir: Direction) {
-        if dir == self.direction.opposite() {
+        if dir == self.direction.opposite() || !self.updated_tail_pos {
             return;
         }
 
         self.direction = dir;
+        self.updated_tail_pos = false;
     }
 
     pub fn get_head_pos(&self) -> &Position {
