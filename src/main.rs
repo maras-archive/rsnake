@@ -22,6 +22,8 @@ fn main() {
 
     let mut main: Game = Game::new(WIDTH, HEIGHT);
 
+    main.start();
+
     while let Some(event) = window.next() {
         if let Some(Button::Keyboard(key)) = event.press_args() {
             main.key_down(key);
