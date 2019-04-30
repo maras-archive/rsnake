@@ -35,7 +35,6 @@ pub struct Game {
 impl Game {
     pub fn new(width: u32, height: u32) -> Self {
         // use fn defined at eof to calc random fruit / snake pos here
-
         Self {
             snake: Snake::new(calc_random_pos(width, height)),
             fruit: calc_random_pos(width, height),
@@ -55,18 +54,18 @@ impl Game {
         self.paused = true;
     }
 
-    pub fn toggle_game_state(&mut self) {
-        if self.paused {
-            self.start();
-        } else {
-            self.pause();
-        }
-    }
+    // pub fn toggle_game_state(&mut self) {
+    //     if self.paused {
+    //         self.start();
+    //     } else {
+    //         self.pause();
+    //     }
+    // }
 
     pub fn draw(&self, ctx: Context, g: &mut G2d) {
         draw_block(&ctx, g, colors::FRUIT, &self.fruit);
         self.snake.draw(&ctx, g);
-        draw_text(&ctx, g, colors::SCORE, self.score.to_string());
+        // draw_text(&ctx, g, colors::SCORE, self.score.to_string());
 
         if self.over {
             draw_overlay(&ctx, g, colors::OVERLAY, self.size)
@@ -94,6 +93,7 @@ impl Game {
                     self.snake.grow();
                     self.snake.update(self.size.0, self.size.1);
                     self.fruit = calc_random_pos(self.size.0, self.size.1);
+                    self.calc_score();
                 }
             } else {
                 self.over = true;
@@ -104,11 +104,11 @@ impl Game {
     pub fn key_down(&mut self, key: keyboard::Key) {
         use keyboard::Key;
 
-        match key {
-            Key::R => self.over = false, // temp solution -> replace current game state trough new one
-            Key::Space => self.toggle_game_state(),
-            _ => self.start(),
-        }
+        // match key {
+        //     Key::R => self.over = false, // temp solution -> replace current game state trough new one
+        //     Key::Space => self.toggle_game_state(),
+        //     _ => self.start(),
+        // }
 
         match key {
             Key::A | Key::Left => self.snake.set_dir(Direction::Left),
@@ -117,6 +117,10 @@ impl Game {
             Key::S | Key::Down => self.snake.set_dir(Direction::Down),
             _ => {}
         }
+    }
+
+    fn calc_score(&mut self) {
+        self.score = (self.snake.get_len() * 10) as u32
     }
 
     // IMPORTANT!! -
