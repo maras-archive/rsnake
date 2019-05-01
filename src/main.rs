@@ -37,7 +37,7 @@ fn main() {
 
         window.draw_2d(&event, |ctx, g| {
             clear(colors::BACKGROUND, g);
-            text::Text::new_color([1.0, 1.0, 1.0, 1.0], 20)
+            text::Text::new_color(colors::SCORE, 20)
                 .draw(
                     main.get_score().to_string().as_ref(),
                     &mut glyphs,
