@@ -1,4 +1,5 @@
-use crate::physics::Position;
+use crate::colors;
+use crate::physics::{Direction, Position};
 use piston_window::types::Color;
 use piston_window::{rectangle, Context, G2d};
 
@@ -16,6 +17,40 @@ pub fn draw_block(ctx: &Context, g: &mut G2d, c: Color, pos: &Position) {
         ctx.transform,
         g,
     );
+}
+
+pub fn draw_snake_head(ctx: &Context, g: &mut G2d, c: Color, pos: &Position, dir: &Direction) {
+    draw_block(ctx, g, c, pos);
+
+    fn draw_eye(ctx: &Context, g: &mut G2d, x: f64, y: f64) {
+        rectangle(colors::BACKGROUND, [x, y, 5.0, 5.0], ctx.transform, g);
+    }
+
+    let (x, y) = (
+        blocks_in_pixels(pos.x as u32) as f64,
+        blocks_in_pixels(pos.y as u32) as f64,
+    );
+
+    let block = blocks_in_pixels(1) as f64;
+
+    match dir {
+        Direction::Up => {
+            draw_eye(ctx, g, x + 5.0, y + 5.0);
+            draw_eye(ctx, g, x + block - 10.0, y + 5.0);
+        }
+        Direction::Right => {
+            draw_eye(ctx, g, x + block - 10.0, y + 5.0);
+            draw_eye(ctx, g, x + block - 10.0, y + block - 10.0);
+        }
+        Direction::Down => {
+            draw_eye(ctx, g, x + 5.0, y + block - 10.0);
+            draw_eye(ctx, g, x + block - 10.0, y + block - 10.0);
+        }
+        Direction::Left => {
+            draw_eye(ctx, g, x + 5.0, y + 5.0);
+            draw_eye(ctx, g, x + 5.0, y + block - 10.0);
+        }
+    }
 }
 
 pub fn draw_overlay(ctx: &Context, g: &mut G2d, c: Color, size: (u32, u32)) {
