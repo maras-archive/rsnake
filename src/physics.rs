@@ -5,6 +5,7 @@ pub struct Position {
 }
 
 impl Position {
+    #[allow(dead_code)]
     pub fn move_to_dir(&mut self, dir: Direction) {
         match dir {
             Direction::Up => self.y -= 1,

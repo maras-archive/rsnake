@@ -71,7 +71,7 @@ impl Snake {
             draw_block(&ctx, g, colors::SNAKE, block)
         }
 
-        draw_block(&ctx, g, colors::SNAKE, &self.head);
+        draw_snake_head(&ctx, g, colors::SNAKE, &self.head, &self.direction);
     }
 
     pub fn set_dir(&mut self, dir: Direction) {
@@ -114,6 +114,18 @@ impl Snake {
         false
     }
 
+    pub fn will_tail_overlapp(&self) -> bool {
+        let next = self.next_head_pos();
+
+        for pos in self.tail.iter() {
+            if *pos == next {
+                return true;
+            }
+        }
+
+        false
+    }
+
     pub fn grow(&mut self) {
         let last = match self.tail.back() {
             Some(pos) => pos.clone(),
@@ -123,7 +135,7 @@ impl Snake {
         self.tail.push_back(last);
     }
 
-    fn next_pos(&self) -> Position {
+    fn next_head_pos(&self) -> Position {
         let mut pos = self.head.clone();
 
         match self.direction {
