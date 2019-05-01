@@ -86,7 +86,7 @@ impl Game {
             // self.check_colision() use snake.get_head_pos;
             self.waiting_time = 0.0;
 
-            if !self.snake.is_tail_overlapping() {
+            if !self.snake.is_tail_overlapping() && !self.snake.will_tail_overlapp() {
                 self.snake.update(self.size.0, self.size.1);
 
                 if *self.snake.get_head_pos() == self.fruit {
