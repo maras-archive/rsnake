@@ -1,9 +1,29 @@
+use piston_window::types::Color;
+use piston_window::{rectangle, text, Context, G2d, Glyphs, Transformed};
+
 use crate::colors;
 use crate::physics::{Direction, Position};
-use piston_window::types::Color;
-use piston_window::{rectangle, Context, G2d};
 
 pub const BLOCK_SIZE: f64 = 25.0;
+
+pub fn draw_text(
+    ctx: &Context,
+    g: &mut G2d,
+    glyphs: &mut Glyphs,
+    text_color: Color,
+    pos: Position,
+    value: &str,
+) {
+    text::Text::new_color(text_color, 20)
+        .draw(
+            value,
+            glyphs,
+            &ctx.draw_state,
+            ctx.transform.trans(pos.x as f64, pos.y as f64),
+            g,
+        )
+        .unwrap();
+}
 
 pub fn draw_block(ctx: &Context, g: &mut G2d, c: Color, pos: &Position) {
     rectangle(
@@ -53,7 +73,9 @@ pub fn draw_snake_head(ctx: &Context, g: &mut G2d, c: Color, pos: &Position, dir
     }
 }
 
-pub fn draw_fruit(ctx: &Context, g: &mut G2d, c: Color, pos: &Position) {}
+pub fn draw_fruit(ctx: &Context, g: &mut G2d, pos: &Position) {
+    draw_block(ctx, g, colors::FRUIT, pos)
+}
 
 pub fn draw_overlay(ctx: &Context, g: &mut G2d, c: Color, size: (u32, u32)) {
     rectangle(

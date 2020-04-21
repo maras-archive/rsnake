@@ -1,8 +1,9 @@
-use piston_window::*;
+use piston_window::{keyboard, Context, G2d, Glyphs};
 use rand::Rng;
 
 use crate::colors;
-use crate::draw::*;
+use crate::draw::{draw_overlay, draw_text};
+use crate::fruit::Fruit;
 use crate::physics::{Direction, Position};
 use crate::snake::Snake;
 
@@ -24,7 +25,7 @@ fn calc_random_pos(width: u32, height: u32) -> Position {
 
 pub struct Game {
     snake: Snake,
-    fruit: Position,
+    fruit: Fruit,
     size: (u32, u32),
     waiting_time: f64,
     score: u32,
@@ -37,7 +38,7 @@ impl Game {
         // use fn defined at eof to calc random fruit / snake pos here
         Self {
             snake: Snake::new(calc_random_pos(width, height)),
-            fruit: calc_random_pos(width, height),
+            fruit: Fruit::new(calc_random_pos(width, height)),
             size: (width, height),
             waiting_time: 0.0,
             score: 0,
@@ -50,9 +51,9 @@ impl Game {
         self.paused = false;
     }
 
-    pub fn pause(&mut self) {
-        self.paused = true;
-    }
+    // pub fn pause(&mut self) {
+    //    self.paused = true;
+    // }
 
     // pub fn toggle_game_state(&mut self) {
     //     if self.paused {
@@ -62,10 +63,17 @@ impl Game {
     //     }
     // }
 
-    pub fn draw(&self, ctx: Context, g: &mut G2d) {
-        draw_block(&ctx, g, colors::FRUIT, &self.fruit);
+    pub fn draw(&self, ctx: Context, g: &mut G2d, glyphs: &mut Glyphs) {
+        draw_text(
+            &ctx,
+            g,
+            glyphs,
+            colors::SCORE,
+            Position { x: 0, y: 20 },
+            &self.score.to_string(),
+        );
+        self.fruit.draw(&ctx, g);
         self.snake.draw(&ctx, g);
-        // draw_text(&ctx, g, colors::SCORE, self.score.to_string());
 
         if self.over {
             draw_overlay(&ctx, g, colors::OVERLAY, self.size)
@@ -89,10 +97,10 @@ impl Game {
             if !self.snake.is_tail_overlapping() && !self.snake.will_tail_overlapp() {
                 self.snake.update(self.size.0, self.size.1);
 
-                if *self.snake.get_head_pos() == self.fruit {
+                if *self.snake.get_head_pos() == self.fruit.get_pos() {
                     self.snake.grow();
                     self.snake.update(self.size.0, self.size.1);
-                    self.fruit = calc_random_pos(self.size.0, self.size.1);
+                    self.fruit = Fruit::new(calc_random_pos(self.size.0, self.size.1));
                     self.calc_score();
                 }
             } else {
@@ -117,10 +125,6 @@ impl Game {
             Key::S | Key::Down => self.snake.set_dir(Direction::Down),
             _ => {}
         }
-    }
-
-    pub fn get_score(&self) -> u32 {
-        self.score
     }
 
     fn calc_score(&mut self) {
