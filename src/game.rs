@@ -117,6 +117,18 @@ impl Game {
             Key::S | Key::Down => self.snake.set_dir(Direction::Down),
             _ => {}
         }
+
+        // pause functionality
+        match key {
+            Key::Space => 
+                if !self.paused {
+                    self.pause();
+                }
+                else{
+                    self.start()
+                },
+            _ => {}
+        }
     }
 
     pub fn get_score(&self) -> u32 {
