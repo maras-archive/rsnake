@@ -111,6 +111,7 @@ impl Game {
         // }
 
         match key {
+            Key::R => self.restart(),
             Key::A | Key::Left => self.snake.set_dir(Direction::Left),
             Key::W | Key::Up => self.snake.set_dir(Direction::Up),
             Key::D | Key::Right => self.snake.set_dir(Direction::Right),
@@ -125,6 +126,11 @@ impl Game {
 
     fn calc_score(&mut self) {
         self.score = (self.snake.get_len() * 10) as u32
+    }
+
+    fn restart(&mut self) {
+        *self = Game::new(self.size.0, self.size.1);
+        self.start();
     }
 
     // IMPORTANT!! -
