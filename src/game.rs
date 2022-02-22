@@ -93,6 +93,9 @@ impl Game {
                     self.snake.grow();
                     self.snake.update(self.size.0, self.size.1);
                     self.fruit = calc_random_pos(self.size.0, self.size.1);
+                    while self.snake.check_fruit_pos(&self.fruit) {
+                        self.fruit = calc_random_pos(self.size.0, self.size.1);
+                    }
                     self.calc_score();
                 }
             } else {

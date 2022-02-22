@@ -147,4 +147,19 @@ impl Snake {
 
         pos
     }
+
+    pub fn check_fruit_pos(&self, fruit_pos: &Position) -> bool {
+        if *fruit_pos == self.head {
+            return true;
+        }
+
+        for pos in self.tail.iter() {
+            if *fruit_pos == *pos {
+                return true;
+            }
+        }
+
+        false
+    }
+
 }
