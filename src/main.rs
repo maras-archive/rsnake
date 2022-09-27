@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 by Maximilian Schulke */
+/* Copyright (C) 2019 by Mara Schulke */
 
 /*
 This program is free software: you can redistribute it and/or modify
