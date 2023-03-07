@@ -17,8 +17,8 @@ fn calc_random_pos(width: u32, height: u32) -> Position {
     let mut rng = rand::thread_rng();
 
     Position {
-        x: rng.gen_range(0, width as i32),
-        y: rng.gen_range(0, height as i32),
+        x: rng.gen_range(0..width as i32),
+        y: rng.gen_range(0..height as i32),
     }
 }
 
