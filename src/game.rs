@@ -1,3 +1,5 @@
+use std::process;
+
 use piston_window::*;
 use rand::Rng;
 
@@ -51,7 +53,22 @@ impl Game {
     }
 
     pub fn pause(&mut self) {
-        self.paused = true;
+        match self.paused {
+            true => self.start(),
+            false => self.paused = true,
+        }
+    }
+    
+    pub fn quit_game(&mut self) {
+        process::exit(0); // Exit the game with a success status code (0).
+    }
+    
+    pub fn restart(&mut self) {
+        self.snake = Snake::new(calc_random_pos(self.size.0, self.size.1));
+        self.fruit = calc_random_pos(self.size.0, self.size.1);
+        self.waiting_time = 0.0;
+        self.score = 0;
+        self.over = false;
     }
 
     // pub fn toggle_game_state(&mut self) {
@@ -68,7 +85,7 @@ impl Game {
         // draw_text(&ctx, g, colors::SCORE, self.score.to_string());
 
         if self.over {
-            draw_overlay(&ctx, g, colors::OVERLAY, self.size)
+            draw_overlay(&ctx, g, colors::OVERLAY, self.size);
         }
     }
 
@@ -102,8 +119,6 @@ impl Game {
     }
 
     pub fn key_down(&mut self, key: keyboard::Key) {
-        use keyboard::Key;
-
         // match key {
         //     Key::R => self.over = false, // temp solution -> replace current game state trough new one
         //     Key::Space => self.toggle_game_state(),
@@ -115,6 +130,9 @@ impl Game {
             Key::W | Key::Up => self.snake.set_dir(Direction::Up),
             Key::D | Key::Right => self.snake.set_dir(Direction::Right),
             Key::S | Key::Down => self.snake.set_dir(Direction::Down),
+            Key::P => self.pause(),
+            Key::R => self.restart(),
+            Key::Escape => self.quit_game(),
             _ => {}
         }
     }

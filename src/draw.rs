@@ -53,7 +53,8 @@ pub fn draw_snake_head(ctx: &Context, g: &mut G2d, c: Color, pos: &Position, dir
     }
 }
 
-pub fn draw_fruit(ctx: &Context, g: &mut G2d, c: Color, pos: &Position) {}
+#[allow(dead_code)]
+pub fn draw_fruit(_ctx: &Context, _g: &mut G2d, _c: Color, _pos: &Position) {}
 
 pub fn draw_overlay(ctx: &Context, g: &mut G2d, c: Color, size: (u32, u32)) {
     rectangle(

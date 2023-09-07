@@ -29,6 +29,11 @@ const HEIGHT: u32 = 25;
 
 fn main() {
     let size = [blocks_in_pixels(WIDTH), blocks_in_pixels(HEIGHT)];
+        
+    println!("W/A/S/D or Up/Left/Down/Right - Controll snake direction");
+    println!("R - Restart the game.");
+    println!("P - Pause the game");
+    println!("Esc - Quit the game");
 
     let mut window: PistonWindow = WindowSettings::new(WINDOW_TITLE, size)
         .resizable(false)
@@ -39,7 +44,6 @@ fn main() {
         .for_folder("assets")
         .unwrap();
     let ref font = assets.join("retro-gaming.ttf");
-    let factory = window.factory.clone();
     let mut glyphs = Glyphs::new(font, TextureContext {
         factory: window.factory.clone(),
         encoder: window.factory.create_command_buffer().into(),
