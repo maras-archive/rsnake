@@ -19,9 +19,9 @@ cargo build --release
 ## Keymap
 - **W/A/S/D** or **Up/Left/Down/Right** - Controll snake direction.
 - **R** - Restart the game.
+-- **P** - Pause the game
 - **ESC** - Quit the game.
 
 ## Known Flaws / ToDo List
-- **R** has no effect yet.
 - There should be an endscreen with restart / quit buttons.
 - The fruit and snake could possibly spawn at the same coordinate / fruits can spawn inside the tail of the snake.
