@@ -1,0 +1,10 @@
+[package]
+name = "rsnake"
+version = "0.1.0"
+authors = ["purged"]
+edition = "2018"
+
+[dependencies]
+piston_window = "0.128.0"
+find_folder = "0.3.0"
+rand = "0.8.5"
